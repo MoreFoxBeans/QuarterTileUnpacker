@@ -1,3 +1,3 @@
 # QuarterTileUnpacker
 
-Tool to convert 5 tiles to 46
+Minimal tool to convert 5 tiles to 46.
