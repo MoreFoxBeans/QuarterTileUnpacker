@@ -32,7 +32,7 @@ int getCorner(int n, int c) {
 }
 
 void setup() {
-  size(128, 128, P2D);
+  size(128, 96, P2D);
   loop();
   
   selectInput("Select a tileset to use:", "fileSelected");
@@ -45,7 +45,6 @@ void drawTile(int x, int y, int bitmask) {
   int tl = tlMap[getCorner(bitmask, 3)] * TILE_WIDTH;
   
   converted.copy(tile5, tr + 8, 0, TILE_WIDTH / 2, TILE_HEIGHT / 2, x * TILE_WIDTH + 8, y * TILE_HEIGHT, TILE_WIDTH / 2, TILE_HEIGHT / 2);
-  converted.copy(tile5, tr + 8, 0, TILE_WIDTH / 2, TILE_HEIGHT / 2, x * TILE_WIDTH + 8, y * TILE_HEIGHT, TILE_WIDTH / 2, TILE_HEIGHT / 2);
   converted.copy(tile5, br + 8, 8, TILE_WIDTH / 2, TILE_HEIGHT / 2, x * TILE_WIDTH + 8, y * TILE_HEIGHT + 8, TILE_WIDTH / 2, TILE_HEIGHT / 2);
   converted.copy(tile5, bl, 8, TILE_WIDTH / 2, TILE_HEIGHT / 2, x * TILE_WIDTH, y * TILE_HEIGHT + 8, TILE_WIDTH / 2, TILE_HEIGHT / 2);
   converted.copy(tile5, tl, 0, TILE_WIDTH / 2, TILE_HEIGHT / 2, x * TILE_WIDTH, y * TILE_HEIGHT, TILE_WIDTH / 2, TILE_HEIGHT / 2);
@@ -57,12 +56,18 @@ void draw() {
   if (fileLoaded) {
     fileLoaded = false;
     
+    converted.beginDraw();
+    
     for (int y = 0; y < 6; y++) {
       for (int x = 0; x < 8; x++) {
         drawTile(x, y, template[y * 8 + x]);
       }
     }
     
+    converted.endDraw();
+    
+    image(converted, 0, 0);
+
     selectOutput("Choose an image to write to:", "outSelected");
   }
   
