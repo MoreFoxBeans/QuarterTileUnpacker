@@ -32,7 +32,9 @@ int getCorner(int n, int c) {
 }
 
 void setup() {
-  size(128, 96, P2D);
+  size(256, 192, P2D);
+  hint(DISABLE_ASYNC_SAVEFRAME);
+  
   loop();
   
   selectInput("Select a tileset to use:", "fileSelected");
@@ -51,11 +53,7 @@ void drawTile(int x, int y, int bitmask) {
 }
 
 void draw() {
-  background(0);
-  
-  if (fileLoaded) {
-    fileLoaded = false;
-    
+  if (fileLoaded && !outPath.equals("")) {
     converted.beginDraw();
     
     for (int y = 0; y < 6; y++) {
@@ -64,17 +62,12 @@ void draw() {
       }
     }
     
+    converted.save(outPath);
     converted.endDraw();
     
-    image(converted, 0, 0);
-
-    selectOutput("Choose an image to write to:", "outSelected");
-  }
-  
-  if (!outPath.equals("")) {
-    converted.save(outPath);
-    
+    fileLoaded = false;
     outPath = "";
+    
     exit();
   }
 }
@@ -101,13 +94,14 @@ void fileSelected(File selection) {
     
     if (valid) {
       tile5 = loadImage(path);
-      fileLoaded = true;
       
       TILE_WIDTH = (int)round(tile5.width / 5);
       TILE_HEIGHT = (int)round(tile5.height);
       
       original = createGraphics(5*TILE_WIDTH, TILE_HEIGHT, P2D);
       converted = createGraphics(8*TILE_WIDTH, 6*TILE_HEIGHT, P2D);
+
+      selectOutput("Choose an image to write to:", "outSelected");
     } else {
       javax.swing.JOptionPane.showMessageDialog(null, "Sorry! You may only load images of type \"png\", \"jpg/jpeg\", \"tga\", and \"gif\".");
       selectInput("Select a tileset to use:", "fileSelected");
@@ -120,6 +114,7 @@ void outSelected(File selection) {
     println("File selection cancelled :(");
     exit();
   } else {
+    fileLoaded = true;
     outPath = selection.getAbsolutePath();
     println(outPath);
   }
